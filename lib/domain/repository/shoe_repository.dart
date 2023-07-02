@@ -1,5 +1,4 @@
 import 'package:sneaker_shop/data/datasource/remote/shoe_remote_datasource.dart';
-import 'package:sneaker_shop/data/model/shoe_model.dart';
 import 'package:sneaker_shop/domain/entity/shoe.dart';
 
 abstract class ShoeRepositoryInterface {
@@ -35,15 +34,4 @@ class ShoeRepository extends ShoeRepositoryInterface {
   }
 }
 
-class ShoeMapper {
-  static ShoeModel toModel(Shoe shoe) {
-    return ShoeModel(
-      id: shoe.id,
-      name: shoe.name,
-      image: shoe.image,
-      description: shoe.description,
-      price: shoe.price,
-      color: shoe.color.toString(),
-    );
-  }
-}
+

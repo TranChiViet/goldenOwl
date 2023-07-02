@@ -3,8 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:sneaker_shop/presentation/products/bloc/shoes/shoes_cubit.dart';
 import 'package:sneaker_shop/presentation/products/bloc/shoes_controller/shoes_controller_cubit.dart';
-import 'package:sneaker_shop/presentation/products/widget/button_widget.dart';
-import 'package:sneaker_shop/presentation/products/widget/text_widget.dart';
+import 'package:sneaker_shop/presentation/widget/button_widget.dart';
+import 'package:sneaker_shop/presentation/widget/text_widget.dart';
 import 'package:sneaker_shop/utils/resource/image_path.dart';
 import 'package:sneaker_shop/utils/style/base_text_style.dart';
 
@@ -27,101 +27,103 @@ class _ShoesPageState extends State<ShoesPage> {
 
   @override
   Widget build(BuildContext context) {
-    double screenWidth = MediaQuery.of(context).size.width;
-    double screenHeight = MediaQuery.of(context).size.height;
     return Scaffold(
       body: Padding(
-        padding: EdgeInsets.only(
-            top: MediaQuery.of(context).padding.top,
-            bottom: MediaQuery.of(context).padding.bottom,
-            left: 16,
-            right: 16),
+        padding: const EdgeInsets.only(left: 16, right: 16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Image.asset(
-                  ImagePath.nike,
-                  height: 80,
-                  width: 80,
-                ),
-                Text(
-                  'Our Products',
-                  style: TxtStyle.topic(),
-                )
-              ],
-            ),
-            Expanded(
-              child: BlocBuilder<ShoesCubit, ShoesState>(
-                bloc: GetIt.instance.get<ShoesCubit>(),
-                builder: (context, state) {
-                  if (state is ShoesSuccess) {
-                    final shoes = state.shoes;
-                    return ListView.builder(
-                        controller: scrollController,
-                        itemCount: shoes.length,
-                        itemBuilder: (context, index) {
-                          final shoe = shoes[index];
-                          return SizedBox(
-                            height: screenHeight,
-                            width: screenWidth,
-                            child: Column(
-                              children: [
-                                Expanded(
-                                  flex: 2,
-                                  child: Container(
-                                    decoration: BoxDecoration(
-                                        color: shoe.color,
-                                        borderRadius:
-                                            BorderRadius.circular(32)),
-                                    child: Container(
-                                        transformAlignment:
-                                            AlignmentDirectional.center,
-                                        transform: Matrix4.rotationZ(-0.4),
-                                        child: Image.network(
-                                          shoe.image,
-                                        )),
-                                  ),
-                                ),
-                                TextWidget.title(
-                                  text: shoe.name,
-                                ),
-                                TextWidget.description(
-                                  text: shoe.description,
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      vertical: 16.0),
-                                  child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      TextWidget.title(
-                                          text: "\$${shoe.price.toString()}"),
-                                      ButtonWidget.add(onTap: () {
-                                        GetIt.instance
-                                            .get<ShoesControllerCubit>()
-                                            .addToCart(shoe: shoe);
-                                      }),
-
-                                      // ButtonWidget.icon(onTap: () {}, icon: ImagePath.check, radius: 40, color: BaseColor.yellow)
-                                    ],
-                                  ),
-                                )
-                              ],
-                            ),
-                          );
-                        });
-                  }
-                  return const CircularProgressIndicator();
-                },
-              ),
-            )
-          ],
+          children: [_buildHeader(), _buildBody()],
         ),
       ),
+    );
+  }
+
+  Expanded _buildBody() {
+    return Expanded(
+      child: BlocBuilder<ShoesCubit, ShoesState>(
+        bloc: GetIt.instance.get<ShoesCubit>(),
+        builder: (context, state) {
+          if (state is ShoesSuccess) {
+            final shoes = state.shoes;
+            return ListView.builder(
+                controller: scrollController,
+                itemCount: shoes.length,
+                itemBuilder: (context, index) {
+                  final shoe = shoes[index];
+                  return Padding(
+                    padding: (index != 0)
+                        ? const EdgeInsets.only(top: 64.0)
+                        : EdgeInsets.zero,
+                    child: SizedBox(
+                      height: MediaQuery.of(context).size.height,
+                      width: MediaQuery.of(context).size.width,
+                      child: Column(
+                        children: [
+                          Expanded(
+                            flex: 1,
+                            child: Container(
+                              decoration: BoxDecoration(
+                                  color: shoe.color,
+                                  borderRadius: BorderRadius.circular(32)),
+                              child: Container(
+                                  transformAlignment:
+                                      AlignmentDirectional.center,
+                                  transform: Matrix4.rotationZ(-0.4),
+                                  child: Image.network(
+                                    shoe.image,
+                                  )),
+                            ),
+                          ),
+                          TextWidget.title(
+                            text: shoe.name,
+                          ),
+                          TextWidget.description(
+                            text: shoe.description,
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 16.0),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                TextWidget.title(
+                                    text: "\$${shoe.price.toString()}"),
+                                ButtonWidget.add(
+                                  // isSelected: shoe.isSelected,
+                                  onTap: () {
+                                    GetIt.instance
+                                        .get<ShoesControllerCubit>()
+                                        .addToCart(shoe: shoe);
+                                  },
+                                ),
+                              ],
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
+                  );
+                });
+          }
+          return const Center(child: CircularProgressIndicator());
+        },
+      ),
+    );
+  }
+
+  Column _buildHeader() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Image.asset(
+          ImagePath.nike,
+          height: 80,
+          width: 80,
+        ),
+        Text(
+          'Our Products',
+          style: TxtStyle.topic(),
+        )
+      ],
     );
   }
 }

@@ -11,7 +11,11 @@ class CartCubit extends Cubit<CartState> {
 
   Future<void> getCart() async {
     final response = await _cartsRepository.getCart();
-    print(response);
-    emit(CartSuccess(cart: response));
+    final double totalPrice = await _cartsRepository.getTotal();
+    emit(CartSuccess(cart: response, totalPrice: totalPrice));
+  }
+
+  void clean() {
+    emit(CartInitial());
   }
 }

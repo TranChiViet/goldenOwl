@@ -13,4 +13,8 @@ class ShoesControllerCubit extends Cubit<ShoesControllerState> {
     await _shoesRepository.addToCart(shoe: shoe);
     emit(ShoesControllerSuccess());
   }
+
+  void clean() {
+    emit(ShoesControllerInitial());
+  }
 }

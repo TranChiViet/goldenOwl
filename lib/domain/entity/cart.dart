@@ -7,7 +7,7 @@ class Cart {
 
   Cart({
     required this.shoe,
-    this.quantity = 1,
+    this.quantity = 0,
   });
 
   Cart.fromModel(CartModel cartModel) {

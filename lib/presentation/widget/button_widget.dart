@@ -1,20 +1,22 @@
 import 'package:flutter/material.dart';
+import 'package:sneaker_shop/utils/resource/image_path.dart';
 import 'package:sneaker_shop/utils/style/base_color.dart';
 import 'package:sneaker_shop/utils/style/base_text_style.dart';
 
 class ButtonWidget {
   static Widget add({
     required VoidCallback onTap,
+    final bool isSelected= false,
   }) {
     return GestureDetector(
-        onTap: onTap,
+        onTap: isSelected? null: onTap,
         child: Container(
           padding: const EdgeInsets.all(8),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(32),
             color: BaseColor.yellow,
           ),
-          child: Container(
+          child: isSelected? ButtonWidget.icon(onTap: (){}, icon: ImagePath.check, radius: 40) : Container(
               padding: const EdgeInsets.all(8),
               color: Colors.transparent,
               child: Text(
@@ -37,7 +39,7 @@ class ButtonWidget {
           width: radius,
           decoration: BoxDecoration(
               shape: BoxShape.circle,
-              color: color ?? Colors.white,
+              color: color ?? BaseColor.yellow,
               ),
           child: Container(
             padding: const EdgeInsets.all(8),
@@ -46,7 +48,6 @@ class ButtonWidget {
               icon,
               height: 24,
               width: 24,
-              // fit: BoxFit.contain,
             ),
           ),
         ));

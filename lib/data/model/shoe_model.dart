@@ -35,6 +35,5 @@ class ShoeModel {
       description= json['description'];
       image= json['image'];
       color= json['color'];
-    
   }
 }

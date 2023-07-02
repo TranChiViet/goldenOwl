@@ -1,11 +1,8 @@
-import 'dart:convert';
-
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sneaker_shop/data/datasource/local/cart_local_datasource.dart';
 import 'package:sneaker_shop/data/model/cart_model.dart';
 import 'package:sneaker_shop/data/model/shoe_model.dart';
 import 'package:sneaker_shop/domain/entity/shoe.dart';
-import 'package:sneaker_shop/domain/repository/shoe_repository.dart';
+import 'package:sneaker_shop/utils/helper/model_helper.dart';
 
 abstract class ShoeRemoteDatasourceInterface {
   Future<List<ShoeModel>> getShoes();
@@ -136,10 +133,11 @@ class ShoeRemoteDatasource implements ShoeRemoteDatasourceInterface {
   Future<void> addToCart({required Shoe shoe}) async {
     List<CartModel> cartItems = await _cartLocalDatasource.getCart();
 
-    final shoeModel = ShoeMapper.toModel(shoe);
-    CartModel cart = CartModel(shoe: shoeModel);
-
+    final shoeModel = ShoeHelper.toModel(shoe);
+    CartModel cart = CartModel(shoe: shoeModel, quantity: 1);
     cartItems.add(cart);
+    
     await _cartLocalDatasource.saveCarts(cartItems);
   }
+
 }

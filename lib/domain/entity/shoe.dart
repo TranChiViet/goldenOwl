@@ -22,13 +22,11 @@ class Shoe {
 
 
   Shoe.fromModel(ShoeModel shoeModel) {
-   
       id= shoeModel.id;
       price= shoeModel.price.toDouble();
       name= shoeModel.name;
       description= shoeModel.description;
       image= shoeModel.image;
       color= ColorHelper.getColorFromHex(shoeModel.color);
-    
   }
 }
