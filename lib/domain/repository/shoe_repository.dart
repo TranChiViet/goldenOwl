@@ -25,19 +25,16 @@ class ShoeRepository extends ShoeRepositoryInterface {
   }
 
   @override
-  Future< void> addToCart(
-      {required Shoe shoe}) async {
+  Future<void> addToCart({required Shoe shoe}) async {
     try {
-      await _shoeRemoteDatasource.addToCart(
-          shoe: shoe);
+      await _shoeRemoteDatasource.addToCart(shoe: shoe);
       return;
     } catch (e) {
       rethrow;
     }
   }
-
-  
 }
+
 class ShoeMapper {
   static ShoeModel toModel(Shoe shoe) {
     return ShoeModel(
@@ -46,7 +43,7 @@ class ShoeMapper {
       image: shoe.image,
       description: shoe.description,
       price: shoe.price,
-      color: shoe.color.toString(), // Chuyển đổi Color thành chuỗi
+      color: shoe.color.toString(),
     );
   }
 }

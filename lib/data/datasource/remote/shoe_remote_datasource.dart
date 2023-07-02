@@ -1,20 +1,19 @@
 import 'dart:convert';
 
-import 'package:sneaker_shop/data/config/service/local_service_client.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:sneaker_shop/data/datasource/local/cart_local_datasource.dart';
 import 'package:sneaker_shop/data/model/cart_model.dart';
 import 'package:sneaker_shop/data/model/shoe_model.dart';
-import 'package:sneaker_shop/domain/entity/cart.dart';
 import 'package:sneaker_shop/domain/entity/shoe.dart';
 import 'package:sneaker_shop/domain/repository/shoe_repository.dart';
 
 abstract class ShoeRemoteDatasourceInterface {
   Future<List<ShoeModel>> getShoes();
-  Future<List<CartModel>> getCart();
   Future<void> addToCart({required Shoe shoe});
-  Future<void> removeFromCart(ShoeModel shoe);
 }
 
 class ShoeRemoteDatasource implements ShoeRemoteDatasourceInterface {
+  final CartLocalDatasource _cartLocalDatasource = CartLocalDatasource();
   @override
   Future<List<ShoeModel>> getShoes() async {
     try {
@@ -133,40 +132,14 @@ class ShoeRemoteDatasource implements ShoeRemoteDatasourceInterface {
     }
   }
 
-  // final SharedPreferences sharedPreferences;
-
-  // SharedPreferenceCartRepository({required this.sharedPreferences});
-
-  static const cartKey = 'cartItems';
-
-  @override
-  Future<List<CartModel>> getCart() async {
-    final data = await LocalServiceClient.get(cartKey);
-    List<CartModel> carts = List.empty(growable: true);
-    if (data != null) carts = jsonDecode(data);
-    return carts;
-  }
-
   @override
   Future<void> addToCart({required Shoe shoe}) async {
-    final cartItems = await getCart();
-final shoeModel = ShoeMapper.toModel(shoe); 
-    final newItem = CartModel(shoe: shoeModel);
-    cartItems.add(newItem);
+    List<CartModel> cartItems = await _cartLocalDatasource.getCart();
 
-    await saveCarts(cartItems);
-  }
+    final shoeModel = ShoeMapper.toModel(shoe);
+    CartModel cart = CartModel(shoe: shoeModel);
 
-  @override
-  Future<void> removeFromCart(ShoeModel shoe) async {
-    final cartItems = await getCart();
-    cartItems.removeWhere((item) => item.shoe.id == shoe.id);
-    await saveCarts(cartItems);
-  }
-
-  Future<void> saveCarts(List<CartModel> carts) async {
-    final mapData = carts.map((cart) => cart.toString()).toList();
-    final String result = jsonEncode(mapData);
-    await LocalServiceClient.save(key: cartKey, value: result);
+    cartItems.add(cart);
+    await _cartLocalDatasource.saveCarts(cartItems);
   }
 }

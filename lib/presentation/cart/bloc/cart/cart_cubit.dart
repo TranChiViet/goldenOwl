@@ -1,5 +1,4 @@
 import 'package:bloc/bloc.dart';
-import 'package:equatable/equatable.dart';
 import 'package:sneaker_shop/domain/entity/cart.dart';
 import 'package:sneaker_shop/domain/repository/cart_repository.dart';
 

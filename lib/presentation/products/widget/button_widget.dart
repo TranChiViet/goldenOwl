@@ -11,20 +11,16 @@ class ButtonWidget {
         child: Container(
           padding: const EdgeInsets.all(8),
           decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(32),
-              color: BaseColor.yellow,
-              boxShadow: [
-                BoxShadow(
-                    blurRadius: 8,
-                    spreadRadius: 1,
-                    color: Colors.black.withOpacity(0.15),
-                    offset: const Offset(0, 2)),
-              ]),
-          child: Container(
-            padding: const EdgeInsets.all(8),
-            color: Colors.transparent,
-            child: Text('ADD TO CART', style: TxtStyle.title(fontSize: 16),)
+            borderRadius: BorderRadius.circular(32),
+            color: BaseColor.yellow,
           ),
+          child: Container(
+              padding: const EdgeInsets.all(8),
+              color: Colors.transparent,
+              child: Text(
+                'ADD TO CART',
+                style: TxtStyle.title(fontSize: 16),
+              )),
         ));
   }
 
@@ -32,7 +28,6 @@ class ButtonWidget {
     required VoidCallback onTap,
     required String icon,
     required double radius,
-    EdgeInsetsGeometry? padding,
     Color? color,
   }) {
     return GestureDetector(
@@ -40,23 +35,18 @@ class ButtonWidget {
         child: Container(
           height: radius,
           width: radius,
-          padding: padding ?? const EdgeInsets.all(8),
           decoration: BoxDecoration(
               shape: BoxShape.circle,
               color: color ?? Colors.white,
-              boxShadow: [
-                BoxShadow(
-                    blurRadius: 8,
-                    spreadRadius: 1,
-                    color: Colors.black.withOpacity(0.15),
-                    offset: const Offset(0, 2)),
-              ]),
+              ),
           child: Container(
             padding: const EdgeInsets.all(8),
             color: Colors.transparent,
             child: Image.asset(
               icon,
-              fit: BoxFit.contain,
+              height: 24,
+              width: 24,
+              // fit: BoxFit.contain,
             ),
           ),
         ));

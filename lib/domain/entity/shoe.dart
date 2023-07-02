@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sneaker_shop/data/model/shoe_model.dart';
+import 'package:sneaker_shop/utils/helper/color_helper.dart';
 
 class Shoe {
   late int id;
@@ -18,14 +19,7 @@ class Shoe {
     required this.color,
   });
 
-  Color _getColorFromHex(String hexColor) {
-  hexColor = hexColor.replaceAll('#', '');
-  if (hexColor.length == 6) {
-    hexColor = 'FF$hexColor';
-  }
-  int colorValue = int.parse(hexColor, radix: 16);
-  return Color(colorValue);
-}
+
 
   Shoe.fromModel(ShoeModel shoeModel) {
    
@@ -34,7 +28,7 @@ class Shoe {
       name= shoeModel.name;
       description= shoeModel.description;
       image= shoeModel.image;
-      color= _getColorFromHex(shoeModel.color);
+      color= ColorHelper.getColorFromHex(shoeModel.color);
     
   }
 }

@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 
 class ShoeModel {
   late int id;
@@ -18,14 +17,16 @@ class ShoeModel {
   });
 
 
-    Color _getColorFromHex(String hexColor) {
-  hexColor = hexColor.replaceAll('#', '');
-  if (hexColor.length == 6) {
-    hexColor = 'FF$hexColor';
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'name': name,
+      'price': price,
+      'description': description,
+      'image': image,
+      'color': color,
+    };
   }
-  int colorValue = int.parse(hexColor, radix: 16);
-  return Color(colorValue);
-}
 
   ShoeModel.fromJson(Map<String, dynamic> json) {
       id= json['id'];

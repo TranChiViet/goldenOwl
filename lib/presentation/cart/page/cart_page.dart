@@ -1,14 +1,15 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
-import 'package:sneaker_shop/data/config/service/local_service_client.dart';
 import 'package:sneaker_shop/presentation/cart/bloc/cart/cart_cubit.dart';
-import 'package:sneaker_shop/presentation/products/bloc/shoes/shoes_cubit.dart';
+import 'package:sneaker_shop/presentation/products/widget/button_widget.dart';
 import 'package:sneaker_shop/presentation/products/widget/text_widget.dart';
+import 'package:sneaker_shop/utils/helper/color_helper.dart';
 import 'package:sneaker_shop/utils/resource/image_path.dart';
+import 'package:sneaker_shop/utils/style/base_color.dart';
 import 'package:sneaker_shop/utils/style/base_text_style.dart';
+
+const double radiusIcon = 30;
 
 class CartPage extends StatefulWidget {
   const CartPage({super.key});
@@ -23,14 +24,11 @@ class _CartPageState extends State<CartPage> {
   @override
   void initState() {
     super.initState();
-    print('check');
+    GetIt.instance.get<CartCubit>().getCart();
   }
-
 
   @override
   Widget build(BuildContext context) {
-    double screenWidth = MediaQuery.of(context).size.width;
-    double screenHeight = MediaQuery.of(context).size.height;
     return Scaffold(
       body: Padding(
         padding: EdgeInsets.only(
@@ -67,21 +65,101 @@ class _CartPageState extends State<CartPage> {
                             itemCount: carts.length,
                             itemBuilder: (context, index) {
                               final cart = carts[index];
-                              return SizedBox(
-                                height: screenHeight,
-                                width: screenWidth,
-                                child: Column(
-                                  children: [
-                                    TextWidget.title(
-                                  text: cart.shoe.name,
-                                ),
-                                  ],
+                              return Padding(
+                                padding: const EdgeInsets.symmetric(vertical: 16.0),
+                                child: SizedBox(
+                                  height: 120,
+                                  child: Row(
+                                    children: [
+                                      Expanded(
+                                        flex: 1,
+                                        child: Stack(
+                                            alignment: Alignment.center,
+                                            children: [
+                                              CircleAvatar(
+                                                backgroundColor: 
+                                                // BaseColor.grey,
+
+                                                ColorHelper.getColorFromString(cart.shoe.color),
+                                                radius: 50,
+                                              ),
+                                              Container(
+                                                  transformAlignment:
+                                                      AlignmentDirectional.center,
+                                                  transform:
+                                                      Matrix4.rotationZ(-0.4),
+                                                  child: Image.network(
+                                                    cart.shoe.image,
+                                                  )),
+                                            ]),
+                                      ),
+                                      Expanded(
+                                        flex: 2,
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceAround,
+                                          children: [
+                                            Text(
+                                              cart.shoe.name,
+                                              style: TxtStyle.title(fontSize: 16),
+                                              overflow: TextOverflow.ellipsis,
+                                              maxLines: 2,
+                                            ),
+                                            Text(
+                                              "\$${cart.shoe.price.toString()}",
+                                              style: TxtStyle.title(fontSize: 16),
+                                            ),
+                                            Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.spaceBetween,
+                                              children: [
+                                                Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment
+                                                          .spaceEvenly,
+                                                  children: [
+                                                    ButtonWidget.icon(
+                                                        onTap: () {},
+                                                        icon: ImagePath.minus,
+                                                        color: BaseColor.grey,
+                                                        radius: radiusIcon),
+                                                    Padding(
+                                                      padding: const EdgeInsets
+                                                              .symmetric(
+                                                          horizontal: 16.0),
+                                                      child: Text(
+                                                        cart.quantity.toString(),
+                                                        style: TxtStyle.title(
+                                                            fontSize: 16),
+                                                      ),
+                                                    ),
+                                                    ButtonWidget.icon(
+                                                        onTap: () {},
+                                                        icon: ImagePath.plus,
+                                                        color: BaseColor.grey,
+                                                        radius: radiusIcon),
+                                                  ],
+                                                ),
+                                                ButtonWidget.icon(
+                                                    onTap: () {},
+                                                    icon: ImagePath.trash,
+                                                    color: BaseColor.yellow,
+                                                    radius: radiusIcon),
+                                              ],
+                                            )
+                                          ],
+                                        ),
+                                      ),
+                                    ],
+                                  ),
                                 ),
                               );
                             })
-                        : Text('No data');
+                        : const Text('Your cart is empty.');
                   }
-                  return ListView.builder(itemBuilder: (context, index) {});
+                  return const CircularProgressIndicator();
                 },
               ),
             )

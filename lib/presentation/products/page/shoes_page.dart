@@ -70,17 +70,18 @@ class _ShoesPageState extends State<ShoesPage> {
                             child: Column(
                               children: [
                                 Expanded(
+                                  flex: 2,
                                   child: Container(
                                     decoration: BoxDecoration(
                                         color: shoe.color,
-                                        borderRadius: BorderRadius.circular(32)),
+                                        borderRadius:
+                                            BorderRadius.circular(32)),
                                     child: Container(
-                                      
-                                        // transform: Matrix4.rotationZ(-0.4),
+                                        transformAlignment:
+                                            AlignmentDirectional.center,
+                                        transform: Matrix4.rotationZ(-0.4),
                                         child: Image.network(
                                           shoe.image,
-                                          // height: screenHeight*0.4,
-                                          // width: screenWidth*0.4,
                                         )),
                                   ),
                                 ),
@@ -91,18 +92,21 @@ class _ShoesPageState extends State<ShoesPage> {
                                   text: shoe.description,
                                 ),
                                 Padding(
-                                  padding: const EdgeInsets.symmetric(vertical: 16.0),
+                                  padding: const EdgeInsets.symmetric(
+                                      vertical: 16.0),
                                   child: Row(
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceBetween,
                                     children: [
-                                      Text(
-                                        "\$${shoe.price.toString()}",
-                                        style: TxtStyle.title(),
-                                      ),
+                                      TextWidget.title(
+                                          text: "\$${shoe.price.toString()}"),
                                       ButtonWidget.add(onTap: () {
-                                        GetIt.instance.get<ShoesControllerCubit>().addToCart(shoe: shoe);
-                                      })
+                                        GetIt.instance
+                                            .get<ShoesControllerCubit>()
+                                            .addToCart(shoe: shoe);
+                                      }),
+
+                                      // ButtonWidget.icon(onTap: () {}, icon: ImagePath.check, radius: 40, color: BaseColor.yellow)
                                     ],
                                   ),
                                 )
@@ -111,7 +115,7 @@ class _ShoesPageState extends State<ShoesPage> {
                           );
                         });
                   }
-                  return ListView.builder(itemBuilder: (context, index) {});
+                  return const CircularProgressIndicator();
                 },
               ),
             )

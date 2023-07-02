@@ -1,6 +1,4 @@
 import 'package:bloc/bloc.dart';
-import 'package:equatable/equatable.dart';
-import 'package:sneaker_shop/data/model/shoe_model.dart';
 import 'package:sneaker_shop/domain/entity/shoe.dart';
 import 'package:sneaker_shop/domain/repository/shoe_repository.dart';
 
@@ -13,7 +11,6 @@ class ShoesControllerCubit extends Cubit<ShoesControllerState> {
 
   Future<void> addToCart({required Shoe shoe}) async {
     await _shoesRepository.addToCart(shoe: shoe);
-
     emit(ShoesControllerSuccess());
   }
 }

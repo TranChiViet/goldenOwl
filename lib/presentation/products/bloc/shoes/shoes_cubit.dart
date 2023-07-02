@@ -9,6 +9,7 @@ class ShoesCubit extends Cubit<ShoesState> {
   final ShoeRepository _shoesRepository = ShoeRepository();
 
   Future<void> getShoe() async {
+    emit(ShoesInitial());
     final response = await _shoesRepository.getShoe();
     emit(ShoesSuccess(shoes: response));
   }

@@ -9,6 +9,13 @@ class CartModel {
     this.quantity = 1,
   });
 
+  Map<String, dynamic> toJson() {
+    return {
+      'shoe': shoe,
+      'quantity': quantity,
+    };
+  }
+
   CartModel.fromJson(Map<String, dynamic> json) {
     shoe = ShoeModel.fromJson(json['shoe']);
     quantity = json['quantity'];
