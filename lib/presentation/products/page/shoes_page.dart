@@ -2,6 +2,8 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
+import 'package:sneaker_shop/domain/entity/cart.dart';
+import 'package:sneaker_shop/domain/entity/shoe.dart';
 import 'package:sneaker_shop/presentation/products/bloc/shoes/shoes_cubit.dart';
 import 'package:sneaker_shop/presentation/products/bloc/shoes_controller/shoes_controller_cubit.dart';
 import 'package:sneaker_shop/presentation/widget/button_widget.dart';
@@ -18,6 +20,7 @@ class ShoesPage extends StatefulWidget {
 
 class _ShoesPageState extends State<ShoesPage> {
   final ScrollController scrollController = ScrollController();
+  List<Cart> cartItems = [];
 
   @override
   void initState() {
@@ -73,8 +76,10 @@ class _ShoesPageState extends State<ShoesPage> {
                                   child: CachedNetworkImage(
                                     key: UniqueKey(),
                                     imageUrl: shoe.image,
-                                    placeholder: (context, url) => const CircularProgressIndicator(),
-                                    errorWidget: (context, url, error) => const CircularProgressIndicator(),
+                                    placeholder: (context, url) =>
+                                        const CircularProgressIndicator(),
+                                    errorWidget: (context, url, error) =>
+                                        const CircularProgressIndicator(),
                                   )),
                             ),
                           ),
@@ -92,11 +97,14 @@ class _ShoesPageState extends State<ShoesPage> {
                                 TextWidget.title(
                                     text: "\$${shoe.price.toString()}"),
                                 ButtonWidget.add(
-                                  // isSelected: shoe.isSelected,
+                                  isSelected: shoe.isSelected,
                                   onTap: () {
-                                    GetIt.instance
-                                        .get<ShoesControllerCubit>()
-                                        .addToCart(shoe: shoe);
+                                    setState(() {
+                                      shoe.isSelected = true;
+                                      GetIt.instance
+                                          .get<ShoesControllerCubit>()
+                                          .addToCart(shoe: shoe);
+                                    });
                                   },
                                 ),
                               ],
@@ -129,5 +137,14 @@ class _ShoesPageState extends State<ShoesPage> {
         )
       ],
     );
+  }
+
+  bool isProductInCart({required Shoe shoe, required List<Cart> cartItems}) {
+    for (var cartItem in cartItems) {
+      if (cartItem.shoe.id == shoe.id) {
+        return true; // Sản phẩm đã tồn tại trong giỏ hàng
+      }
+    }
+    return false; // Sản phẩm chưa tồn tại trong giỏ hàng
   }
 }

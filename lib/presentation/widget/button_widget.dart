@@ -6,7 +6,7 @@ import 'package:sneaker_shop/utils/style/base_text_style.dart';
 class ButtonWidget {
   static Widget add({
     required VoidCallback onTap,
-    final bool isSelected= false,
+    bool isSelected= false,
   }) {
     return GestureDetector(
         onTap: isSelected? null: onTap,

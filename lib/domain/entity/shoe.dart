@@ -9,6 +9,7 @@ class Shoe {
   late String description;
   late String image;
   late Color color;
+  bool isSelected = false;
 
   Shoe({
     required this.id,
@@ -17,6 +18,7 @@ class Shoe {
     required this.description,
     required this.image,
     required this.color,
+    this.isSelected=false,
   });
 
 
