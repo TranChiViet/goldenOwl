@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
@@ -86,8 +87,11 @@ class _CartPageState extends State<CartPage> {
                                   transformAlignment:
                                       AlignmentDirectional.center,
                                   transform: Matrix4.rotationZ(-0.5),
-                                  child: Image.network(
-                                    cart.shoe.image,
+                                  child: CachedNetworkImage(
+                                    key: UniqueKey(),
+                                    imageUrl: cart.shoe.image,
+                                    placeholder: (context, url) => const CircularProgressIndicator(),
+                                    errorWidget: (context, url, error) => const CircularProgressIndicator(),
                                   )),
                             ]),
                           ),
